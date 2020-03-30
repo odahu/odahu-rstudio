@@ -1,12 +1,15 @@
 ARG JUPYTER_MINIMAL_NOTEBOOK_IMAGE=jupyter/minimal-notebook:678ada768ab1
 FROM $JUPYTER_MINIMAL_NOTEBOOK_IMAGE
 
+ARG RSTUDIO_VERSION
+ARG R_VERSION
+
 USER 0
 
 RUN mkdir r-studio && \
     mkdir r-lang && \
-    wget -O rstudio.tar.gz https://github.com/rstudio/rstudio/archive/v1.2.5033.tar.gz && \
-    wget -O R.tar.gz       https://cran.r-project.org/src/base/R-3/R-3.6.3.tar.gz && \
+    wget -O rstudio.tar.gz https://github.com/rstudio/rstudio/archive/v$RSTUDIO_VERSION.tar.gz && \
+    wget -O R.tar.gz       https://cran.r-project.org/src/base/R-3/R-$R_VERSION.tar.gz && \
     tar -xf rstudio.tar.gz -C ./r-studio && \
     tar -xf R.tar.gz       -C ./r-lang && \
     apt-get update && \
