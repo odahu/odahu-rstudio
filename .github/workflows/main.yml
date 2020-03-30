@@ -5,16 +5,33 @@ jobs:
     name: Build RStudio and R docker image
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    env:
+      RSTUDIO_VERSION: 1.2.5033
+      R_VERSION: 3.6.3
     steps:
     - name: Checkout source
       uses: actions/checkout@v1
 
-    - name: Build and publish Docker Image with RStudio 1.2.5033 and R 3.6.3
+    - name: Build and publish Docker Image with RStudio ${{ env.RSTUDIO_VERSION }} and R ${{ env.R_VERSION }}
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: odahu/odahu-rstudio
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        tags: 1.2.5033r3.6.3
-        buildargs: RSTUDIO_VERSION=1.2.5033,R_VERSION=3.6.3
+        tags: ${{ env.RSTUDIO_VERSION }}r${{ env.R_VERSION }}
+        buildargs: RSTUDIO_VERSION=${{ env.RSTUDIO_VERSION }},R_VERSION=${{ env.R_VERSION }}
+        cache: true
+
+    - name: Build and publish extended Docker Image with RStudio ${{ env.RSTUDIO_VERSION }}, R ${{ env.R_VERSION }} and data science packages
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: odahu/odahu-rstudio-datascience
+        username: ${{ secrets.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        tags: ${{ env.RSTUDIO_VERSION }}r${{ env.R_VERSION }}
+        buildargs: BASE_RSTUDIO_IMAGE=odahu/odahu-rstudio:${{ env.RSTUDIO_VERSION }}r${{ env.R_VERSION }}
+        cache: true
+        dockerfile: datascience.Dockerfile
+
+    
 
