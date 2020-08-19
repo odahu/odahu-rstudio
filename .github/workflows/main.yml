@@ -23,7 +23,7 @@ jobs:
     - name: Get tag name (if it is not a release)
       id: get_tag
       if: github.event_name == 'push'
-      run: echo ::set-env name=TAG::$(echo "${GITHUB_REF}" | sed -e "s/refs\/tags\///g")
+      run: echo ::set-env name=TAG::$(echo "${GITHUB_REF##*/}")
 
     - name: Build and publish Docker Image with RStudio ${{ env.RSTUDIO_VERSION }} and R ${{ env.R_VERSION }}
       id: build_base
