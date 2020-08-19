@@ -18,7 +18,7 @@ jobs:
     - name: Get release version (if it is a release)
       id: get_version
       if: github.event_name == 'release'
-      run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+      run: echo ::set-env name=TAG::$(echo ${GITHUB_REF:10})
 
     - name: Get tag name (if it is not a release)
       id: get_tag
@@ -32,7 +32,7 @@ jobs:
         name: odahu/odahu-rstudio
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        tags: ${{ github.event_name == 'release' ? env.RELEASE_VERSION : env.TAG }}
+        tags: ${{ env.TAG }}
         buildargs: RSTUDIO_VERSION=${{ env.RSTUDIO_VERSION }},R_VERSION=${{ env.R_VERSION }},BASE_IMAGE=${{ BASE_IMAGE }}
         cache: true
 
@@ -42,7 +42,7 @@ jobs:
         name: odahu/odahu-rstudio-datascience
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        tags: ${{ github.event_name == 'release' ? env.RELEASE_VERSION : env.TAG }}
+        tags: ${{ env.TAG }}
         buildargs: BASE_RSTUDIO_IMAGE=odahu/odahu-rstudio:${{ steps.build_base.outputs.tag }}@sha256:${{ steps.build_base.outputs.digest }}
         cache: true
         dockerfile: datascience.Dockerfile
