@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
         tags: ${{ env.TAG }}
-        buildargs: RSTUDIO_VERSION=${{ env.RSTUDIO_VERSION }},R_VERSION=${{ env.R_VERSION }},BASE_IMAGE=${{ BASE_IMAGE }}
+        buildargs: RSTUDIO_VERSION=${{ env.RSTUDIO_VERSION }},R_VERSION=${{ env.R_VERSION }},BASE_IMAGE=${{ env.BASE_IMAGE }}
         cache: true
 
     - name: Build and publish extended Docker Image with RStudio ${{ env.RSTUDIO_VERSION }}, R ${{ env.R_VERSION }} and data science packages
